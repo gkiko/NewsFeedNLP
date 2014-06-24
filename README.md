@@ -1,4 +1,4 @@
-RussianAgent
+traxan-di-popka
 ============
 
-Determine if the politician works for Russian government using Sentiment analysis.
+Analyze forum posts and determin what people think about X using Sentiment analysis.
