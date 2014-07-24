@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -10,31 +11,42 @@ import java.util.StringTokenizer;
 
 public class Main {
 	static String trainDir = "/Users/gkiko/Documents/NLP/assign3/pa3-sentiment/data/imdb1";
+	static String testDir = "/Users/gkiko/Documents/NLP/assign3/pa3-sentiment/data/imdb1/pos";
 	
 	public static void main(String[] args) {
 		SentimentAnal anal = new SentimentAnal();
 
 		Main m = new Main();
-		List<DirFiles> dirList = m.getFileContents(trainDir);
+		List<DirFiles> dirList = m.getDirWithFiles(trainDir);
 		for(DirFiles dr : dirList){
-			for(List<String> fileContent : dr){
+			for(File file : dr){
+				List<String> fileContent = m.getFileContent(file);
 				anal.addInfoToClassifier(dr.getKlass(), fileContent);
 			}
 		}
+		
+		List<File> fileList = m.getFileList(testDir);
+		String klass = fileList.get(0).getParentFile().getName();
+		String res;
+		double accuracy = 0;
+		for(File f : fileList){
+			res = anal.classifyInput(m.getFileContent(f));
+			if(res.equals(klass)){
+				accuracy++;
+			}
+		}
+		System.out.println(accuracy/fileList.size());
+		
 	}
 	
-	private List<DirFiles> getFileContents(String dirPath){
+	private List<DirFiles> getDirWithFiles(String dirPath){
 		List<DirFiles> ls = new ArrayList<Main.DirFiles>();
-		File trainDir = new File(dirPath);
-		for(File f : trainDir.listFiles()){
+		for(File f : getFileList(dirPath)){
 			if(!f.getName().startsWith(".") && f.isDirectory()){
 				
 				DirFiles dirFiles = new DirFiles(f.getName());
-				List<String> fileContent;
-				for(File f1 : f.listFiles()){
-					fileContent = getFileContent(f1);
-					dirFiles.addFileContent(fileContent);
-				}
+				List<File> fileList = Arrays.asList(f.listFiles());
+				dirFiles.addFileList(fileList);
 				ls.add(dirFiles);
 			}
 		}
@@ -42,7 +54,12 @@ public class Main {
 		return ls;
 	}
 	
-	private List<String> getFileContent(File f){
+	public List<File> getFileList(String dirPath){
+		File dir = new File(dirPath);
+		return Arrays.asList(dir.listFiles());
+	}
+	
+	public List<String> getFileContent(File f){
 		try (BufferedReader input = new BufferedReader(new FileReader(f));){
 	  		StringBuilder contents = new StringBuilder();
 
@@ -75,22 +92,22 @@ public class Main {
 	  	return ret;
 	}
 	
-	private class DirFiles implements Iterable<List<String>>{
+	private class DirFiles implements Iterable<File>{
 		
-		private List<List<String>> fileContents;
+		private List<File> files;
 		
 		private String klass;
 		
 		public DirFiles(String klass) {
 			this.klass = klass;
-			fileContents = new ArrayList<List<String>>();
+			files = new ArrayList<File>();
 		}
 		
-		public void addFileContent(List<String> fileContent){
-			if(fileContent == null){
+		public void addFileList(List<File> files){
+			if(files == null){
 				return;
 			}
-			this.fileContents.add(fileContent);
+			this.files.addAll(files);
 		}
 		
 		private String getKlass(){
@@ -98,8 +115,8 @@ public class Main {
 		}
 
 		@Override
-		public Iterator<List<String>> iterator() {
-			return fileContents.iterator();
+		public Iterator<File> iterator() {
+			return files.iterator();
 		}
 	}
 }
