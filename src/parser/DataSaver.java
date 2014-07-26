@@ -6,9 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
-
 public class DataSaver {
 	public static void main(String[] args) throws Exception {
 		DataSaver s = new DataSaver();
