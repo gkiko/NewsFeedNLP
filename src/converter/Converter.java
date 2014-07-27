@@ -1,26 +1,29 @@
-package TrainDataConverter;
+package converter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.StringTokenizer;
 
 public class Converter {
 	public static void main(String[] args) {
 		try {
 			StringTokenizer tk;
-			BufferedWriter bw = new BufferedWriter(new FileWriter("data/Converted.txt"));
-			BufferedReader rd = new BufferedReader(new FileReader("data/1-2marti-guruli"));
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("data/Converted.txt"), StandardCharsets.UTF_8));
+			BufferedReader rd = new BufferedReader(new InputStreamReader(new FileInputStream("data/sentiment/pos/1-2marti-guruli"), StandardCharsets.UTF_8));
 			String line = rd.readLine();
 			while(line != null){
 				tk = new StringTokenizer(line);
 				String word = "";
 				while(tk.hasMoreTokens()){
 					word = tk.nextToken();
-					if(word.contains("ტრეინინგ")){
+					if(word.contains("ტრენინგ")){
 						bw.append('\n' + word + " PERSON");
 					}else{
 						bw.append('\n' + word + " O");
@@ -32,10 +35,8 @@ public class Converter {
 			bw.close();
 			rd.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

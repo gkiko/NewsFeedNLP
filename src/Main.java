@@ -10,8 +10,8 @@ import java.util.StringTokenizer;
 
 
 public class Main {
-	static String trainDir = "/Users/gkiko/Documents/NLP/assign3/pa3-sentiment/data/imdb1";
-	static String testDir = "/Users/gkiko/Documents/NLP/assign3/pa3-sentiment/data/imdb1/pos";
+	static String trainDir = "/Users/gkiko/Workspace/traxan-di-popka/data/sentiment/";
+	static String testFile = "/Users/gkiko/Workspace/traxan-di-popka/data/sentiment/pos/1-2marti-guruli";//"/Users/gkiko/Documents/NLP/assign3/pa3-sentiment/data/imdb1/neg";
 	
 	public static void main(String[] args) {
 		SentimentAnal anal = new SentimentAnal();
@@ -25,17 +25,15 @@ public class Main {
 			}
 		}
 		
-		List<File> fileList = m.getFileList(testDir);
-		String klass = fileList.get(0).getParentFile().getName();
-		String res;
-		double accuracy = 0;
-		for(File f : fileList){
-			res = anal.classifyInput(m.getFileContent(f));
-			if(res.equals(klass)){
-				accuracy++;
-			}
+		double accuracyPos = 0, accuracyNeg = 0;
+		String res = anal.classifyInput(m.getFileContent(new File(testFile)));
+		if(res.equals("pos")){
+			accuracyPos++;
 		}
-		System.out.println(accuracy/fileList.size());
+		if(res.equals("neg")){
+			accuracyNeg++;
+		}
+		System.out.println(accuracyPos > accuracyNeg ? "pos" : "neg");
 		
 	}
 	
