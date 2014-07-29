@@ -1,17 +1,23 @@
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 
 public class Main {
-	static String trainDir = "/Users/gkiko/Workspace/traxan-di-popka/data/sentiment/";
-	static String testFile = "/Users/gkiko/Workspace/traxan-di-popka/data/sentiment/pos/1-2marti-guruli";//"/Users/gkiko/Documents/NLP/assign3/pa3-sentiment/data/imdb1/neg";
+	static String trainDir = "data/sentiment/";
+	static String testFile = "data/sentiment/pos/1-2marti-guruli";
+	static String stopWords = "stopwords.txt";
+	static boolean filterStopWords = true;
 	
 	public static void main(String[] args) {
 		SentimentAnal anal = new SentimentAnal();
@@ -20,21 +26,13 @@ public class Main {
 		List<DirFiles> dirList = m.getDirWithFiles(trainDir);
 		for(DirFiles dr : dirList){
 			for(File file : dr){
-				List<String> fileContent = m.getFileContent(file);
+				List<String> fileContent = m.segmentFile(file);
 				anal.addInfoToClassifier(dr.getKlass(), fileContent);
 			}
 		}
 		
-		double accuracyPos = 0, accuracyNeg = 0;
-		String res = anal.classifyInput(m.getFileContent(new File(testFile)));
-		if(res.equals("pos")){
-			accuracyPos++;
-		}
-		if(res.equals("neg")){
-			accuracyNeg++;
-		}
-		System.out.println(accuracyPos > accuracyNeg ? "pos" : "neg");
-		
+		String res = anal.classifyInput(m.segmentFile(new File(testFile)));
+		System.out.println(res);
 	}
 	
 	private List<DirFiles> getDirWithFiles(String dirPath){
@@ -57,17 +55,36 @@ public class Main {
 		return Arrays.asList(dir.listFiles());
 	}
 	
-	public List<String> getFileContent(File f){
-		try (BufferedReader input = new BufferedReader(new FileReader(f));){
+	public List<String> segmentFile(File f){
+		Set<String> filter = readStopWords(stopWords);
+		String content = getFileContent(f);
+		return segmentWords(content, filter);
+	}
+	
+	private Set<String> readStopWords(String fileName){
+		Set<String> set = new HashSet<String>();
+		try (BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), Charset.forName("UTF-8")))){
+
+	  		for(String line = input.readLine(); line != null; line = input.readLine()) {
+	  			set.add(line);
+	  		}
+	  		
+	  	} catch(IOException e) {
+	  		e.printStackTrace();
+	  	}
+		return set;
+	}
+	
+	private String getFileContent(File f){
+		try (BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(f), Charset.forName("UTF-8")))){
 	  		StringBuilder contents = new StringBuilder();
 
 	  		for(String line = input.readLine(); line != null; line = input.readLine()) {
 	  			contents.append(line);
 	  			contents.append("\n");
 	  		}
-	  		input.close();
-
-	  		return segmentWords(contents.toString());
+	  		
+	  		return contents.toString();
 
 	  	} catch(IOException e) {
 	  		e.printStackTrace();
@@ -76,14 +93,14 @@ public class Main {
 	  	} 
 	}
 	
-	private List<String> segmentWords(String fileContent){
+	private List<String> segmentWords(String fileContent, Set<String> filter){
 		List<String> ret = new ArrayList<String>();
 
 		StringTokenizer tk = new StringTokenizer(fileContent);
 		String word;
 	  	while(tk.hasMoreTokens()){
 	  		word = tk.nextToken();
-	  		if(word.length() > 0) {
+	  		if(word.length() > 0 && !filter.contains(word)) {
 	  			ret.add(word);
 	  		}
 	  	}
