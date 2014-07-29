@@ -2,6 +2,7 @@ package converter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,28 +13,41 @@ import java.nio.charset.StandardCharsets;
 import java.util.StringTokenizer;
 
 public class Converter {
+	final static String dirPath = "data/sentiment/neg";
+	final static String writeFilePath = "data/Converted.txt";
+	
 	public static void main(String[] args) {
-		try {
-			StringTokenizer tk;
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("data/Converted.txt"), StandardCharsets.UTF_8));
-			BufferedReader rd = new BufferedReader(new InputStreamReader(new FileInputStream("data/sentiment/pos/1-2marti-guruli"), StandardCharsets.UTF_8));
-			String line = rd.readLine();
-			while(line != null){
+		Converter c = new Converter();
+		
+		File fOut = new File(writeFilePath);
+		fOut.delete();
+
+		File dir = new File(dirPath);
+		for(File f : dir.listFiles()){
+			if(!f.getName().startsWith(".")){
+				c.convertToFile(fOut, f);
+			}
+		}
+	}
+	
+	public void convertToFile(File fileOut, File fileIn){
+		String line;
+		StringTokenizer tk;
+		try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileOut, true), StandardCharsets.UTF_8));
+			BufferedReader rd = new BufferedReader(new InputStreamReader(new FileInputStream(fileIn), StandardCharsets.UTF_8));){
+			while((line = rd.readLine()) != null){
 				tk = new StringTokenizer(line);
 				String word = "";
 				while(tk.hasMoreTokens()){
 					word = tk.nextToken();
-					if(word.contains("ტრენინგ")){
+					if(word.contains("ივანიშვილ")){
 						bw.append('\n' + word + " PERSON");
 					}else{
 						bw.append('\n' + word + " O");
 					}
 				}
-				line = rd.readLine();
 			}
 			bw.flush();
-			bw.close();
-			rd.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
