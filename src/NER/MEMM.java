@@ -24,6 +24,8 @@ public class MEMM {
 		}
 
 		List<Datum> testData = runMEMM(args[0], args[1]);
+		
+		
 
 		// print words + guess labels for development
 		if (print) {
