@@ -49,6 +49,7 @@ public class SentimentAnal {
 		word = word.replaceAll(",", "");
 		word = word.replaceAll(";", "");
 		word = word.replaceAll(":", "");
+		word = word.replaceAll(".", "");
 		char br = '*';
 		word = word.replaceAll("\\"+br, "");
 		word = word.replaceAll("'", "");
