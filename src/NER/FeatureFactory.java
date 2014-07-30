@@ -1,5 +1,7 @@
 package NER;
 
+import helper.GlobalConstHelper;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -53,6 +55,7 @@ public class FeatureFactory {
 					lastnameSet.add(line);
 				}
 			}
+			rd.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -68,6 +71,7 @@ public class FeatureFactory {
 					firstNameSet.add(line);
 				}
 			}
+			rd.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -103,6 +107,7 @@ public class FeatureFactory {
 
 		checkPersonStatus(features, previousWord);
 		normalPersonNameChecks(features, currentWord, previousWord, previousLabel);
+		personNamesStemCheck(features, currentWord, previousWord, previousLabel);
 		
 		return features;
 	}
@@ -115,9 +120,22 @@ public class FeatureFactory {
 	private void normalPersonNameChecks(List<String> features, String currentWord, String previousWord, String previousLabel){
 		if(firstNameSet.contains(currentWord) || lastnameSet.contains(currentWord))
 			features.add("personNames");
-		if(previousLabel.equals("PERSON") && (firstNameSet.contains(previousWord + " " + currentWord)
+		if(previousLabel.equals("PERSON") && previousWord != null && (firstNameSet.contains(previousWord + " " + currentWord)
 												|| lastnameSet.contains(previousWord + " " + currentWord)))
 			features.add("personNames");
+	}
+	
+	private void personNamesStemCheck(List<String> features, String currentWord, String previousWord, String previousLabel){
+		for(int i = 0; i < GlobalConstHelper.NAME_SUFFIXES.length; i++){
+			String suffix = GlobalConstHelper.NAME_SUFFIXES[i];
+			if(currentWord.endsWith(suffix)){
+				String withoutSuffix = currentWord.substring(0, currentWord.length() - suffix.length());
+				if(firstNameSet.contains(withoutSuffix) || lastnameSet.contains(withoutSuffix))
+					features.add("personNames");
+			}	
+			if(previousWord != null && previousLabel.equals("PERSON") && !previousWord.endsWith(suffix) && currentWord.endsWith(suffix))
+				features.add("withSuffix");
+		}
 	}
 	
 	private String getPreviousWord(List<String> words, int position){
