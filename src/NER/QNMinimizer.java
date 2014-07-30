@@ -794,24 +794,24 @@ public class QNMinimizer {
         : Integer.MAX_VALUE;
     // maxIterations = (maxIterations > 0) ? maxIterations : Integer.MAX_VALUE;
 
-    sayln("          An explanation of the output:               ");
-    sayln("Iter           The number of iterations");
-    sayln("evals          The number of function evaluations");
-    sayln("SCALING        <D> Diagonal scaling was used");
-    sayln("               <I> Scaled Identity");
-    sayln("LINESEARCH     [## M steplength]  Minpack linesearch");
-    sayln("                   1-Function value was too high");
-    sayln("                   2-Value ok, gradient positive, positive curvature");
-    sayln("                   3-Value ok, gradient negative, positive curvature");
-    sayln("                   4-Value ok, gradient negative, negative curvature");
-    sayln("               [.. B]  Backtracking");
-    sayln("VALUE          The current function value");
-    sayln("TIME           Total elapsed time");
-    sayln("|GNORM|        The current norm of the gradient");
-    sayln("{RELNORM}      The ratio of the current to initial gradient norms");
-    sayln("AVEIMPROVE     The average improvement / current value");
-    sayln();
-    sayln("Iter ## evals ## <SCALING> [LINESEARCH] VALUE TIME |GNORM| {RELNORM} AVEIMPROVE");
+//    sayln("          An explanation of the output:               ");
+//    sayln("Iter           The number of iterations");
+//    sayln("evals          The number of function evaluations");
+//    sayln("SCALING        <D> Diagonal scaling was used");
+//    sayln("               <I> Scaled Identity");
+//    sayln("LINESEARCH     [## M steplength]  Minpack linesearch");
+//    sayln("                   1-Function value was too high");
+//    sayln("                   2-Value ok, gradient positive, positive curvature");
+//    sayln("                   3-Value ok, gradient negative, positive curvature");
+//    sayln("                   4-Value ok, gradient negative, negative curvature");
+//    sayln("               [.. B]  Backtracking");
+//    sayln("VALUE          The current function value");
+//    sayln("TIME           Total elapsed time");
+//    sayln("|GNORM|        The current norm of the gradient");
+//    sayln("{RELNORM}      The ratio of the current to initial gradient norms");
+//    sayln("AVEIMPROVE     The average improvement / current value");
+//    sayln();
+//    sayln("Iter ## evals ## <SCALING> [LINESEARCH] VALUE TIME |GNORM| {RELNORM} AVEIMPROVE");
 
     // Beginning of the loop.
     do {
@@ -821,7 +821,7 @@ public class QNMinimizer {
         sayln();
         double newValue;
         double[] newPoint = new double[3]; // initialized in loop
-        say("Iter " + its + " evals " + fevals + " ");
+//        say("Iter " + its + " evals " + fevals + " ");
 
         // Compute the search direction
         say("<");
