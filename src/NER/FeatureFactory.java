@@ -101,7 +101,23 @@ public class FeatureFactory {
 		
 		String previousWord = getPreviousWord(words, position);
 
+		checkPersonStatus(features, previousWord);
+		normalPersonNameChecks(features, currentWord, previousWord, previousLabel);
+		
 		return features;
+	}
+	
+	private void checkPersonStatus(List<String> features, String previousWord){
+		if(previousWord != null && personStatusSet.contains(previousWord))
+			features.add("personStatus=" + previousWord);
+	}
+	
+	private void normalPersonNameChecks(List<String> features, String currentWord, String previousWord, String previousLabel){
+		if(firstNameSet.contains(currentWord) || lastnameSet.contains(currentWord))
+			features.add("personNames");
+		if(previousLabel.equals("PERSON") && (firstNameSet.contains(previousWord + " " + currentWord)
+												|| lastnameSet.contains(previousWord + " " + currentWord)))
+			features.add("personNames");
 	}
 	
 	private String getPreviousWord(List<String> words, int position){
