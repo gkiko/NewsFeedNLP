@@ -18,6 +18,7 @@ import org.json.JSONObject;
 public class FeatureFactory {
 	private HashSet<String> firstNameSet;
 	private HashSet<String> lastnameSet;
+	private HashSet<String> personStatusSet;
 
 	/**
 	 * Add any necessary initialization steps for your features here. Using this
@@ -27,6 +28,19 @@ public class FeatureFactory {
 	public FeatureFactory() {
 		readFirstNamesData();
 		readLastNamesData();
+		fillPersonStatusSet();
+	}
+	
+	private void fillPersonStatusSet(){
+		personStatusSet = new HashSet<String>();
+		personStatusSet.add("ბატონ");
+		personStatusSet.add("ქალბატონ");
+		personStatusSet.add("ექიმი");
+		personStatusSet.add("პროფესორი");
+		personStatusSet.add("დოქტორი");
+		personStatusSet.add("ამხანაგო");
+		personStatusSet.add("დედაო");
+		personStatusSet.add("მამაო");
 	}
 	
 	private void readLastNamesData (){
@@ -84,6 +98,8 @@ public class FeatureFactory {
 		 */
 
 		// TODO: Add your features here
+		
+		
 
 		return features;
 	}
