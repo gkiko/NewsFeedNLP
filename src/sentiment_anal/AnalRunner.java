@@ -1,5 +1,7 @@
 package sentiment_anal;
 
+import helper.NegationAppender;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,30 +18,31 @@ import java.util.StringTokenizer;
 
 
 public class AnalRunner {
-	static String trainDir = "data/sentiment/";
+	static String testFile2 = "data/dev2";
+	static String trainDirectory = "data/sentiment/";
 	static String testFile = "data/sentiment/pos/1-2marti-guruli";
-	static String stopWords = "stopwords.txt";
+	static String stopWords = "data/stopwords.txt";
 	static boolean filterStopWords = true;
 	
 	public static void main(String[] args) {
-		SentimentAnal anal = new SentimentAnal();
-
-		AnalRunner m = new AnalRunner();
-		List<DirFiles> dirList = m.getDirWithFiles(trainDir);
-		for(DirFiles dr : dirList){
-			for(File file : dr){
-				List<String> fileContent = m.segmentFile(file);
-				anal.addInfoToClassifier(dr.getKlass(), fileContent);
-			}
-		}
-		
-		String res = anal.classifyInput(m.segmentFile(new File(testFile)));
-		System.out.println(res);
+		AnalRunner.launchSentimentAnal("data/sentiment/", "data/sentiment/neg/cv2");
+//		SentimentAnal anal = new SentimentAnal();
+//		
+//		AnalRunner m = new AnalRunner();
+//		List<DirFiles> dirList = m.getDirWithFiles(trainDirectory);
+//		for(DirFiles dr : dirList){
+//			for(File file : dr){
+//				List<String> fileContent = m.segmentFile(file);
+//				anal.addInfoToClassifier(dr.getKlass(), fileContent);
+//			}
+//		}
+//		String res = anal.classifyInput(m.segmentFile(new File(testFile)));
+//		System.out.println(res);
 	}
 	
-	public static void launchSentimentAnal(){
+	public static void launchSentimentAnal(String trainDir, String fileName){
 		SentimentAnal anal = new SentimentAnal();
-
+		
 		AnalRunner m = new AnalRunner();
 		List<DirFiles> dirList = m.getDirWithFiles(trainDir);
 		for(DirFiles dr : dirList){
@@ -47,35 +50,48 @@ public class AnalRunner {
 				List<String> fileContent = m.segmentFile(file);
 				anal.addInfoToClassifier(dr.getKlass(), fileContent);
 			}
-		}
-		
-		String res = anal.classifyInput(m.segmentFile(new File(testFile)));
+		}	
+		String res = anal.classifyInput(m.segmentFile(new File(fileName)));
 		System.out.println(res);
 	}
 	
 	private List<DirFiles> getDirWithFiles(String dirPath){
 		List<DirFiles> ls = new ArrayList<AnalRunner.DirFiles>();
-		for(File f : getFileList(dirPath)){
-			if(!f.getName().startsWith(".") && f.isDirectory()){
-				
-				DirFiles dirFiles = new DirFiles(f.getName());
-				List<File> fileList = Arrays.asList(f.listFiles());
-				dirFiles.addFileList(fileList);
-				ls.add(dirFiles);
-			}
+		for(File f : getDirList(dirPath)){
+			DirFiles dirFiles = new DirFiles(f.getName());
+			dirFiles.addFileList(getFileList(f.getAbsolutePath()));
+			ls.add(dirFiles);
 		}
 		
 		return ls;
 	}
 	
-	public List<File> getFileList(String dirPath){
+	public List<File> getDirList(String dirPath){
 		File dir = new File(dirPath);
-		return Arrays.asList(dir.listFiles());
+		List<File> list = new ArrayList<>();
+		for(File f : Arrays.asList(dir.listFiles())){
+			if(!f.getName().startsWith(".") && f.isDirectory()){
+				list.add(f);
+			}
+		}
+		return list;
+	}
+	
+	private List<File> getFileList(String dirPath){
+		File dir = new File(dirPath);
+		List<File> list = new ArrayList<>();
+		for(File f : Arrays.asList(dir.listFiles())){
+			if(!f.getName().startsWith(".") && !f.isDirectory()){
+				list.add(f);
+			}
+		}
+		return list;
 	}
 	
 	public List<String> segmentFile(File f){
 		Set<String> filter = readStopWords(stopWords);
 		String content = getFileContent(f);
+//		content = NegationAppender.negativeAppender(content);
 		return segmentWords(content, filter);
 	}
 	
