@@ -38,14 +38,17 @@ public class FeatureFactory {
 	
 	private void fillPersonStatusSet(){
 		personStatusSet = new HashSet<String>();
-		personStatusSet.add("ბატონ");
-		personStatusSet.add("ქალბატონ");
-		personStatusSet.add("ექიმი");
-		personStatusSet.add("პროფესორი");
-		personStatusSet.add("დოქტორი");
-		personStatusSet.add("ამხანაგო");
-		personStatusSet.add("დედაო");
-		personStatusSet.add("მამაო");
+		for(int i = 0; i < GlobalConstHelper.PERSON_STATUSES.length; i++) {
+			String status = GlobalConstHelper.PERSON_STATUSES[i];
+			System.out.println(status + " " + i);
+			personStatusSet.add(status);
+			for(int j = 0; j < GlobalConstHelper.STATUS_NOUN_SUFFIXES.length; j++){
+				String statusWithSuffix = status;
+				statusWithSuffix += GlobalConstHelper.STATUS_NOUN_SUFFIXES[j];
+				System.out.println(statusWithSuffix + " " + j);
+				personStatusSet.add(statusWithSuffix);
+			}
+		}
 	}
 	
 	private void readLastNamesData (){
