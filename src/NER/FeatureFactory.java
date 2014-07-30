@@ -99,9 +99,16 @@ public class FeatureFactory {
 
 		// TODO: Add your features here
 		
-		
+		String previousWord = getPreviousWord(words, position);
 
 		return features;
+	}
+	
+	private String getPreviousWord(List<String> words, int position){
+		String previousWord = null;
+		if(position > 0)
+			previousWord = words.get(position - 1);
+		return previousWord;
 	}
 
 	/** Do not modify this method **/
