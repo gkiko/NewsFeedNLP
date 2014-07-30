@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import sentiment_anal.SentimentAnal;
+
 
 public class Main {
 	static String trainDir = "data/sentiment/";

@@ -1,6 +1,9 @@
+package sentiment_anal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+
+import wordstems.StemmMap;
 
 
 public class SentimentAnal {
@@ -8,9 +11,7 @@ public class SentimentAnal {
 	private HashMap<String, Double> posWords = new HashMap<String, Double>();
 	private HashMap<String, Double> negWords = new HashMap<String, Double>();
 	private HashMap<String, Double> totalClassWords = new HashMap<String, Double>();
-	
 	private HashSet<String> tempSet;
-	
 	
 	public void addInfoToClassifier(String classType, List<String> words){
 		tempSet = new HashSet<String>();
@@ -20,6 +21,8 @@ public class SentimentAnal {
 			negativeClasses++;
 		for(int i = 0; i < words.size(); i++){
 			String word = words.get(i);
+			word = removeNonCharacterSymbols(word);
+			word = getWordStem(word);
 			saveFreq(word, totalClassWords);
 			if("pos".equals(classType))
 				saveFreqBinorized(word, posWords, tempSet);
@@ -27,6 +30,31 @@ public class SentimentAnal {
 				saveFreqBinorized(word, negWords, tempSet);
 		}
 	}
+	
+	private String getWordStem(String word){
+		String stem = "";
+		if(StemmMap.stemms.containsKey(word)){
+			stem = StemmMap.stemms.get(word);
+		} else 
+			stem = word;
+		return stem;
+	}
+	
+	private String removeNonCharacterSymbols(String word) {
+		word = word.replaceAll("!", "");
+		word = word.replaceAll("\\?", "");
+		word = word.replaceAll("-", "");
+		word = word.replaceAll("_", "");
+		word = word.replaceAll("\\.", "");
+		word = word.replaceAll(",", "");
+		word = word.replaceAll(";", "");
+		word = word.replaceAll(":", "");
+		char br = '*';
+		word = word.replaceAll("\\"+br, "");
+		word = word.replaceAll("'", "");
+		return word;
+	}
+
 	
 	private void saveFreq(String word, HashMap<String, Double> map){
 		if(map.containsKey(word)){

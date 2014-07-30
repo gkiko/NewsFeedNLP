@@ -13,7 +13,7 @@ public class StemmMap {
 	
 	public static void readWordStemms(){
 		try {
-			BufferedReader rd = new BufferedReader(new InputStreamReader(new FileInputStream("stems.txt"), "UTF-8"));
+			BufferedReader rd = new BufferedReader(new InputStreamReader(new FileInputStream("data/stems.txt"), "UTF-8"));
 			String line = rd.readLine();
 			StringTokenizer tk;
 			String stem = "", linkedWords = "";
