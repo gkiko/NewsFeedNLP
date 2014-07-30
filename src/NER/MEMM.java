@@ -1,9 +1,14 @@
 package NER;
+
 import java.util.*;
 import java.io.*;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import custom_features.FeatureMatcher;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -12,48 +17,101 @@ public class MEMM {
 
 	public static void main(String[] args) throws IOException {
 
+		System.out.println("asdasda");
+
 		boolean print = false;
 		boolean submit = false;
 
 		if (args.length > 2) {
-		    if (args[2].equals("-print")) {
-			print = true;
-		    } else if (args[2].equals("-submit")) {
-			submit = true;
-		    }
+			if (args[2].equals("-print")) {
+				print = true;
+			} else if (args[2].equals("-submit")) {
+				submit = true;
+			}
 		}
 
 		List<Datum> testData = runMEMM(args[0], args[1]);
-		
-		
 
 		// print words + guess labels for development
-		if (print) {
-			for (Datum datum : testData) {
-			    System.out.println(base64decode(datum.word) + "\t" + datum.label + "\t"
-						+ datum.guessLabel);
-			}
-		}
-
-		// print guess labels for submission
-		if (submit) {
-			for (Datum datum : testData) {
-			    System.out.println("+++" + base64decode(datum.word) + "\t" + datum.guessLabel);
-			}
-			return;
-		}
+		// if (print) {
+		// for (Datum datum : testData) {
+		// System.out.println(base64decode(datum.word) + "\t" + datum.label +
+		// "\t"
+		// + datum.guessLabel);
+		// }
+		// }
+		//
+		// // print guess labels for submission
+		// if (submit) {
+		// for (Datum datum : testData) {
+		// System.out.println("+++" + base64decode(datum.word) + "\t" +
+		// datum.guessLabel);
+		// }
+		// return;
+		// }
 
 		System.out.println();
 		Scorer.score(testData);
 
 	}
 
+	public static void MEMM(String trainFile, String testFile, List<Datum> test)
+			throws IOException {
+		System.out.println("asdasda");
 
-    public static List<Datum> runMEMM(String trainFile, String testFile) throws IOException{
+		boolean print = false;
+		boolean submit = false;
+
+		// if (args.length > 2) {
+		// if (args[2].equals("-print")) {
+		// print = true;
+		// } else if (args[2].equals("-submit")) {
+		// submit = true;
+		// }
+		// }
+
+		List<Datum> testData = runMEMM(trainFile, testFile);
+
+		System.out.println(testData.size() + " " + test.size());
+
+		// print words + guess labels for development
+		// if (print) {
+		// for (Datum datum : testData) {
+		// System.out.println(base64decode(datum.word) + "\t" + datum.label +
+		// "\t"
+		// + datum.guessLabel);
+		// }
+		// }
+		//
+		// // print guess labels for submission
+		// if (submit) {
+		// for (Datum datum : testData) {
+		// System.out.println("+++" + base64decode(datum.word) + "\t" +
+		// datum.guessLabel);
+		// }
+		// return;
+		// }
+
+//		System.out.println();
+//		Scorer.score(testData);
+
+		FeatureMatcher fm = new FeatureMatcher();
+		fm.match(testData, test);
+	}
+
+	private static String base64encode(String str) {
+		Base64 base = new Base64();
+		byte[] strBytes = str.getBytes();
+		byte[] encBytes = base.encode(strBytes);
+		String encoded = new String(encBytes);
+		return encoded;
+	}
+
+	public static List<Datum> runMEMM(String trainFile, String testFile)
+			throws IOException {
 
 		List<Datum> trainData = readData(trainFile);
 		List<Datum> testDataWithMultiplePrevLabels = readData(testFile);
-		
 
 		LogConditionalObjectiveFunction obj = new LogConditionalObjectiveFunction(
 				trainData);
@@ -62,7 +120,8 @@ public class MEMM {
 		// restore the original test data from the source
 		List<Datum> testData = new ArrayList<Datum>();
 		testData.add(testDataWithMultiplePrevLabels.get(0));
-		for (int i = 1; i < testDataWithMultiplePrevLabels.size(); i += obj.labelIndex.size()) {
+		for (int i = 1; i < testDataWithMultiplePrevLabels.size(); i += obj.labelIndex
+				.size()) {
 			testData.add(testDataWithMultiplePrevLabels.get(i));
 		}
 
@@ -115,11 +174,11 @@ public class MEMM {
 		return data;
 	}
 
-    private static String base64decode(String str) {
-	Base64 base = new Base64();
-	byte[] strBytes = str.getBytes();
-	byte[] decodedBytes = base.decode(strBytes);
-	String decoded = new String(decodedBytes);
-	return decoded;
-    }
+	private String base64decode(String str) {
+		Base64 base = new Base64();
+		byte[] strBytes = str.getBytes();
+		byte[] decodedBytes = base.decode(strBytes);
+		String decoded = new String(decodedBytes);
+		return decoded;
+	}
 }
