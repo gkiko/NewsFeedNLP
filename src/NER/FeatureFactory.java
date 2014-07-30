@@ -29,8 +29,11 @@ public class FeatureFactory {
 	 */
 	public FeatureFactory() {
 		readFirstNamesData();
+		System.out.println("First Names Read");
 		readLastNamesData();
+		System.out.println("Last Names Read");
 		fillPersonStatusSet();
+		System.out.println("Statuses");
 	}
 	
 	private void fillPersonStatusSet(){
@@ -48,12 +51,13 @@ public class FeatureFactory {
 	private void readLastNamesData (){
 		lastnameSet = new HashSet<String>();
 		try {
-			BufferedReader rd = new BufferedReader(new InputStreamReader(new FileInputStream("/data/Gvarebi.txt"),  "UTF-8"));
+			BufferedReader rd = new BufferedReader(new InputStreamReader(new FileInputStream("data/Gvarebi.txt"),  "UTF-8"));
 			String line = rd.readLine();
 			while(line != null){
 				if(!lastnameSet.contains(line)){
 					lastnameSet.add(line);
 				}
+				line = rd.readLine();
 			}
 			rd.close();
 		} catch (IOException e) {
@@ -64,12 +68,13 @@ public class FeatureFactory {
 	private void readFirstNamesData (){
 		firstNameSet = new HashSet<String>();
 		try {
-			BufferedReader rd = new BufferedReader(new InputStreamReader(new FileInputStream("/data/Saxelebi.txt"),  "UTF-8"));
+			BufferedReader rd = new BufferedReader(new InputStreamReader(new FileInputStream("data/Saxelebi.txt"),  "UTF-8"));
 			String line = rd.readLine();
 			while(line != null){
 				if(!firstNameSet.contains(line)){
 					firstNameSet.add(line);
 				}
+				line = rd.readLine();
 			}
 			rd.close();
 		} catch (IOException e) {
@@ -147,10 +152,8 @@ public class FeatureFactory {
 
 	/** Do not modify this method **/
 	public List<Datum> readData(String filename) throws IOException {
-
 		List<Datum> data = new ArrayList<Datum>();
-		BufferedReader in = new BufferedReader(new FileReader(filename));
-
+		BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
 		for (String line = in.readLine(); line != null; line = in.readLine()) {
 			if (line.trim().length() == 0) {
 				continue;

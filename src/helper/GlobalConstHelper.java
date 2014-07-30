@@ -1,7 +1,7 @@
 package helper;
 
 public class GlobalConstHelper {
-	public static String NOT_WORD_KEY = "არ_";
+	public static String NOT_WORD_KEY = "áƒ�áƒ _";
 	
 	public static final String[] NAME_SUFFIXES = new String[] { "ა", "ი", "ე", "ო", "უ", "ის", "ით", "ად", "მა", "ამ", "ს", "ები", "ების", "ებით", 
 		"ებად", "ებო", "ებად", "ებმა", "ებს", "ობა", "ობით", "ობად", "ობამ", "ობას", "ობავ", "ოდენი", "ოდენ", "თ", "ც", "იც", 

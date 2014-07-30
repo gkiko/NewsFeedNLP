@@ -13,4 +13,11 @@ public class Datum {
     this.word = word;
     this.label = label;
   }
+  
+  @Override
+	public String toString() {
+	  	String result = "";
+	  	result += word + " " + label + " " + guessLabel;
+		return result;
+	}
 }
