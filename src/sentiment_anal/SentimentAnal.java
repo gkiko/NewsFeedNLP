@@ -21,6 +21,7 @@ public class SentimentAnal {
 			positiveClasses++;
 		else
 			negativeClasses++;
+		
 		for(int i = 0; i < words.size(); i++){
 			String word = words.get(i);
 			word = removeNonCharacterSymbols(word);
@@ -48,17 +49,18 @@ public class SentimentAnal {
 	}
 	
 	private String removeNonCharacterSymbols(String word) {
-		word = word.replaceAll("!", "");
-		word = word.replaceAll("\\?", "");
-		word = word.replaceAll("-", "");
-		word = word.replaceAll("\\.", "");
-		word = word.replaceAll(",", "");
-		word = word.replaceAll(";", "");
-		word = word.replaceAll(":", "");
-		word = word.replaceAll(".", "");
-		char br = '*';
-		word = word.replaceAll("\\"+br, "");
-		word = word.replaceAll("'", "");
+		word = word.replace("^ა-ჰ_", "");
+//		word = word.replaceAll("!", "");
+//		word = word.replaceAll("\\?", "");
+//		word = word.replaceAll("-", "");
+//		word = word.replaceAll("\\.", "");
+//		word = word.replaceAll(",", "");
+//		word = word.replaceAll(";", "");
+//		word = word.replaceAll(":", "");
+//		word = word.replaceAll("\\.", "");
+//		char br = '*';
+//		word = word.replaceAll("\\"+br, "");
+//		word = word.replaceAll("'", "");
 		
 		if(!word.startsWith(GlobalConstHelper.NOT_WORD_KEY))
 			word = word.replaceAll("_", "");
