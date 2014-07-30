@@ -96,7 +96,7 @@ public class MEMM {
 //		Scorer.score(testData);
 
 		FeatureMatcher fm = new FeatureMatcher();
-		fm.match(testData, test);
+		System.out.println(fm.match(testData, test));
 	}
 
 	private static String base64encode(String str) {

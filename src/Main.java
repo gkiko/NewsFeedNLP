@@ -23,8 +23,8 @@ public class Main {
 		StemmMap.readWordStemms();
 		
 		try {
-			NER_Main.launchNER();
-			AnalRunner.launchSentimentAnal();
+			NER_Main.launchNER("data/train", "data/dev2");
+			AnalRunner.launchSentimentAnal("data/sentiment/", "data/sentiment/neg/cv0");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -5,17 +5,17 @@ import java.util.List;
 
 public class NER_Main {
 	public static void main(String[] args) throws IOException {
-		launchNER();
+		launchNER("data/train", "data/dev2");
 	}
 	
-	public static void launchNER() throws IOException{
+	public static void launchNER(String trainFile, String testFile) throws IOException{
 		System.out.println("Shemovida");
 		
 		String print = "";
 		FeatureFactory ff = new FeatureFactory();
 		// read the train and test data
-		List<Datum> trainData = ff.readData("data/train");
-		List<Datum> testData = ff.readData("data/dev2");
+		List<Datum> trainData = ff.readData(trainFile);
+		List<Datum> testData = ff.readData(testFile);
 		
 		// add the features
 		List<Datum> trainDataWithFeatures = ff.setFeaturesTrain(trainData);
