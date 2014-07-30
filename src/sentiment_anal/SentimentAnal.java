@@ -1,4 +1,6 @@
 package sentiment_anal;
+import helper.GlobalConstHelper;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,11 +34,16 @@ public class SentimentAnal {
 	}
 	
 	private String getWordStem(String word){
+		String wordInProcess = word;
 		String stem = "";
-		if(StemmMap.stemms.containsKey(word)){
-			stem = StemmMap.stemms.get(word);
+		if(wordInProcess.contains(GlobalConstHelper.NOT_WORD_KEY)){
+			stem += GlobalConstHelper.NOT_WORD_KEY;
+			wordInProcess = wordInProcess.substring(3);
+		}
+		if(StemmMap.stemms.containsKey(wordInProcess)){
+			stem += StemmMap.stemms.get(wordInProcess);
 		} else 
-			stem = word;
+			stem += wordInProcess;
 		return stem;
 	}
 	
@@ -44,7 +51,6 @@ public class SentimentAnal {
 		word = word.replaceAll("!", "");
 		word = word.replaceAll("\\?", "");
 		word = word.replaceAll("-", "");
-		word = word.replaceAll("_", "");
 		word = word.replaceAll("\\.", "");
 		word = word.replaceAll(",", "");
 		word = word.replaceAll(";", "");
@@ -53,6 +59,10 @@ public class SentimentAnal {
 		char br = '*';
 		word = word.replaceAll("\\"+br, "");
 		word = word.replaceAll("'", "");
+		
+		if(!word.startsWith(GlobalConstHelper.NOT_WORD_KEY))
+			word = word.replaceAll("_", "");
+		
 		return word;
 	}
 
