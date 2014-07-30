@@ -1,9 +1,13 @@
 package NER;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -12,6 +16,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class FeatureFactory {
+	private HashSet<String> firstNameSet;
+	private HashSet<String> lastnameSet;
 
 	/**
 	 * Add any necessary initialization steps for your features here. Using this
@@ -19,7 +25,38 @@ public class FeatureFactory {
 	 * intialize anything.
 	 */
 	public FeatureFactory() {
-
+		readFirstNamesData();
+		readLastNamesData();
+	}
+	
+	private void readLastNamesData (){
+		lastnameSet = new HashSet<String>();
+		try {
+			BufferedReader rd = new BufferedReader(new InputStreamReader(new FileInputStream("/data/Gvarebi.txt"),  "UTF-8"));
+			String line = rd.readLine();
+			while(line != null){
+				if(!lastnameSet.contains(line)){
+					lastnameSet.add(line);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void readFirstNamesData (){
+		firstNameSet = new HashSet<String>();
+		try {
+			BufferedReader rd = new BufferedReader(new InputStreamReader(new FileInputStream("/data/Saxelebi.txt"),  "UTF-8"));
+			String line = rd.readLine();
+			while(line != null){
+				if(!firstNameSet.contains(line)){
+					firstNameSet.add(line);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
