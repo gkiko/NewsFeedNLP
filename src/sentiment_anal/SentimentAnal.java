@@ -65,7 +65,6 @@ public class SentimentAnal {
 		
 		return word;
 	}
-
 	
 	private void saveFreq(String word, HashMap<String, Double> map){
 		if(map.containsKey(word)){
@@ -157,10 +156,5 @@ public class SentimentAnal {
 			return map.get(word);
 		else
 			return 0.0;
-	}
-	
-
-	public static void main(String[] args) {
-		System.out.println("opa");
 	}
 }
