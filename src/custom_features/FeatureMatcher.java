@@ -1,5 +1,4 @@
 package custom_features;
-import java.util.Arrays;
 import java.util.List;
 
 import NER.Datum;
@@ -16,18 +15,18 @@ public class FeatureMatcher {
 			normalDatum = normalDatumList.get(i);
 			datumWord = normalDatum.word;
 			if(personLabel(datum)){
-				if(datumWord.contains("ბიძ")) score1 += 1;
+				if(containsBidzo(normalDatum)) score1 += 1;
 				if(datumWord.contains("ივანიშვილ")){
 					score1 += 1.5;
-					if(prevDatum != null && normalPrevDatum.word.contains("ბიძ")) score1 += 1.5;
-					if(personLabel(prevDatum) && (prevDatum != null && !normalPrevDatum.word.contains("ბიძ"))) score1 -= 2;
+					if(prevDatum != null && containsBidzo(normalPrevDatum)) score1 += 1.5;
+					if(personLabel(prevDatum) && (prevDatum != null && !containsBidzo(normalPrevDatum))) score1 -= 2;
 				}
 				
-				if(datumWord.contains("მიშა") || datumWord.contains("მიხეილ") || datumWord.contains("მაღალი")) score2 += 1;
+				if(containtsMisha(normalDatum)) score2 += 1;
 				if(datumWord.contains("სააკაშვილ")){
-					score2 += 1.2;
-					if(prevDatum != null && normalPrevDatum.word.contains("მიშა")) score2 += 1.5;
-					if(personLabel(prevDatum) && (prevDatum != null && !normalPrevDatum.word.contains("მიშა"))) score2 -= 2;
+					score2 += 1.5;
+					if(prevDatum != null && containtsMisha(normalPrevDatum)) score2 += 1.5;
+					if(personLabel(prevDatum) && (prevDatum != null && !containtsMisha(normalPrevDatum))) score2 -= 2;
 				}
 			}
 			
@@ -51,13 +50,21 @@ public class FeatureMatcher {
 		return datum.label!=null && datum.label.equals("PERSON");
 	}
 	
+	private boolean containsBidzo(Datum datum){
+		return datum.word.contains("ბიძ") || datum.word.contains("ექსპრემიერი") || datum.word.contains("ჰაკიმ");
+	}
+	
+	private boolean containtsMisha(Datum datum){
+		return datum.word.contains("მიშა") || datum.word.contains("მიხეილ") || datum.word.contains("მაღალი") || datum.word.contains("ექსპრეზიდენტი");
+	}
+	
 	public static void main(String[] args) {
-//		List<Datum> ls = Arrays.asList(new Datum[]{new Datum("საქართველოს", "O"), new Datum("პრემიერი", "O"), new Datum("არის", "O"), new Datum("ბიძო", "PERSON"), new Datum("სააკაშვილი", "PERSON")});
+//		List<Datum> ls = Arrays.asList(new Datum[]{new Datum("ჩვენ", "O"), new Datum("ჰაკიმ", "PERSON"), new Datum("ფაშას", "O"), new Datum("ვეძახით", "O"), new Datum("ირაკლი", "PERSON"), new Datum("ღარიბაშვილს", "PERSON")});
 //		fillDatum(ls);
-//		
-//		List<Datum> ls1 = Arrays.asList(new Datum[]{new Datum("ჩვენი", "O"), new Datum("მაღალი", "person"), new Datum("დაკითხვაზე", "O"), new Datum("დაიბარეს", "O")});
+		
+//		List<Datum> ls1 = Arrays.asList(new Datum[]{new Datum("���������������", "O"), new Datum("������������������", "person"), new Datum("������������������������������", "O"), new Datum("������������������������", "O")});
 //		fillDatum(ls1);
-//		
+		
 //		FeatureMatcher fm = new FeatureMatcher();
 //		fm.match(ls);
 //		fm.match(ls1);

@@ -1,7 +1,9 @@
 package NER;
 
-import java.util.*;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,15 +11,10 @@ import org.json.JSONTokener;
 
 import custom_features.FeatureMatcher;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 /** Do not modify this class **/
 public class MEMM {
 
 	public static void main(String[] args) throws IOException {
-
-		System.out.println("asdasda");
 
 		boolean print = false;
 		boolean submit = false;

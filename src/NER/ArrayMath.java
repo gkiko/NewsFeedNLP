@@ -1,5 +1,4 @@
 package NER;
-import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Collection;

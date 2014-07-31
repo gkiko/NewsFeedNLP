@@ -1,3 +1,5 @@
 eclipse.preferences.version=1
 encoding//src/FeatureMatcher.java=UTF-8
+encoding//src/custom_features/FeatureMatcher.java=UTF-8
+encoding//src/helper/GlobalConstHelper.java=UTF-8
 encoding//src/helper/NegationAppender.java=UTF-8

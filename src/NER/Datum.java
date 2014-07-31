@@ -1,5 +1,5 @@
 package NER;
-import java.util.*;
+import java.util.List;
 
 public class Datum {
 
